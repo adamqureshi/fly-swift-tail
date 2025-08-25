@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fly Swift Tail - AI Jet Advisor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #ffffff;
+            color: #000000;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: #000000;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: #ffffff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            color: #000000;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            font-size: 20px;
+        }
+
+        .icon-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .main-container {
+            flex: 1;
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 65px);
+        }
+
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: #f8f8f8;
+        }
+
+        .message-group {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message-group.user {
+            flex-direction: row-reverse;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .avatar.ai {
+            background: #000000;
+            color: #ffffff;
+        }
+
+        .avatar.user {
+            background: #ffffff;
+            color: #000000;
+            border: 2px solid #000000;
+        }
+
+        .message-content {
+            max-width: 70%;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .message-group.user .message-content {
+            background: #000000;
+            color: #ffffff;
+        }
+
+        .message-text {
+            font-size: 15px;
+            line-height: 1.5;
+            color: #000000;
+        }
+
+        .message-group.user .message-text {
+            color: #ffffff;
+        }
+
+        .quick-form {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 16px 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 12px;
+            color: #666666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .form-input {
+            padding: 10px 12px;
+            background: #f8f8f8;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            color: #000000;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: #000000;
+            background: #ffffff;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .purpose-chips {
+            display: flex;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .chip {
+            padding: 8px 16px;
+            background: #e0e0e0;
+            border: 2px solid transparent;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            color: #000000;
+            font-weight: 500;
+        }
+
+        .chip.active {
+            background: #000000;
+            color: #ffffff;
+        }
+
+        .chip:hover:not(.active) {
+            background: #d0d0d0;
+        }
+
+        .submit-btn {
+            padding: 10px 20px;
+            background: #000000;
+            border: none;
+            border-radius: 20px;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .suggested-actions {
+            padding: 16px 24px;
+            background: #ffffff;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .suggestions-container {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .suggestion {
+            padding: 10px 16px;
+            background: #f8f8f8;
+            border: 2px solid #e0e0e0;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            color: #000000;
+            font-weight: 500;
+        }
+
+        .suggestion:hover {
+            background: #000000;
+            color: #ffffff;
+            border-color: #000000;
+        }
+
+        .input-container {
+            padding: 20px 24px;
+            background: #ffffff;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f8f8f8;
+            border: 2px solid #e0e0e0;
+            border-radius: 24px;
+            padding: 4px 4px 4px 16px;
+            transition: all 0.2s;
+        }
+
+        .input-wrapper:focus-within {
+            border-color: #000000;
+            background: #ffffff;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #000000;
+            font-size: 14px;
+            outline: none;
+            padding: 8px 0;
+        }
+
+        .chat-input::placeholder {
+            color: #999999;
+        }
+
+        .send-button {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #000000;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .send-button:hover {
+            transform: scale(1.1);
+        }
+
+        .premium-banner {
+            margin: 16px 24px;
+            background: #000000;
+            color: #ffffff;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .premium-content {
+            flex: 1;
+        }
+
+        .premium-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #ffffff;
+        }
+
+        .premium-description {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.4;
+        }
+
+        .premium-cta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .premium-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .premium-btn {
+            padding: 10px 20px;
+            background: #ffffff;
+            border: none;
+            border-radius: 20px;
+            color: #000000;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .premium-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f8f8f8;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cccccc;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #999999;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .premium-banner {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+            
+            .message-content {
+                max-width: 85%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-section">
+            <div class="logo-icon">✈</div>
+            <div class="logo-text">Fly Swift Tail • AI Jet Advisor</div>
+        </div>
+        <div class="header-actions">
+            <button class="icon-btn">⋯</button>
+            <button class="icon-btn">⤢</button>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="chat-container" id="chatContainer">
+            <div class="message-group">
+                <div class="avatar ai">✈</div>
+                <div class="message-content">
+                    <div class="message-text">
+                        Welcome to Fly Swift Tail! I'm your AI Jet Advisor. I'll help you find the perfect private jet for your needs. 
+                        <br><br>
+                        To get started, I'll need some quick information about you and your travel plans. You can fill out the form below or just tell me what you're looking for.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Form -->
+        <div class="quick-form" id="quickForm">
+            <div class="form-grid">
+                <div class="form-field">
+                    <label class="form-label">Name</label>
+                    <input type="text" class="form-input" id="userName" placeholder="John Doe">
+                </div>
+                <div class="form-field">
+                    <label class="form-label">Location</label>
+                    <input type="text" class="form-input" id="userLocation" placeholder="New York, NY">
+                </div>
+                <div class="form-field">
+                    <label class="form-label">Phone</label>
+                    <input type="tel" class="form-input" id="userPhone" placeholder="+1 (555) 000-0000">
+                </div>
+            </div>
+            <div class="form-actions">
+                <div class="purpose-chips">
+                    <div class="chip active" data-purpose="business">Business</div>
+                    <div class="chip" data-purpose="event">Event</div>
+                    <div class="chip" data-purpose="leisure">Leisure</div>
+                </div>
+                <button class="submit-btn" onclick="submitUserInfo()">Get Recommendations</button>
+            </div>
+        </div>
+
+        <!-- Premium Banner -->
+        <div class="premium-banner">
+            <div class="premium-content">
+                <div class="premium-title">✨ Premium AI Flight Plan</div>
+                <div class="premium-description">
+                    Get a personalized travel plan with route optimization, aircraft selection, and exclusive provider connections
+                </div>
+            </div>
+            <div class="premium-cta">
+                <div class="premium-price">$250</div>
+                <button class="premium-btn" onclick="getPremiumPlan()">Upgrade</button>
+            </div>
+        </div>
+
+        <!-- Suggested Actions -->
+        <div class="suggested-actions">
+            <div class="suggestions-container">
+                <div class="suggestion" onclick="askQuestion('What jets are best for NYC to Miami?')">NYC to Miami routes</div>
+                <div class="suggestion" onclick="askQuestion('How much does a transcontinental flight cost?')">Pricing estimates</div>
+                <div class="suggestion" onclick="askQuestion('What amenities are available?')">Jet amenities</div>
+                <div class="suggestion" onclick="askQuestion('Can you arrange ground transport?')">Ground services</div>
+                <div class="suggestion" onclick="askQuestion('Show me available jets for tomorrow')">Availability</div>
+            </div>
+        </div>
+
+        <!-- Input -->
+        <div class="input-container">
+            <div class="input-wrapper">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Message..." onkeypress="handleKeyPress(event)">
+                <button class="send-button" onclick="sendMessage()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M22 2L11 13M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let userData = {
+            purpose: 'business'
+        };
+        let conversationHistory = [];
+        let formSubmitted = false;
+
+        // Handle purpose chip selection
+        document.querySelectorAll('.chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                if (this.dataset.purpose) {
+                    document.querySelectorAll('.purpose-chips .chip').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    userData.purpose = this.dataset.purpose;
+                }
+            });
+        });
+
+        function askQuestion(question) {
+            document.getElementById('chatInput').value = question;
+            sendMessage();
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message
+            addMessage(message, 'user');
+            conversationHistory.push({role: 'user', content: message});
+            
+            // Clear input
+            input.value = '';
+            
+            // Simulate AI response
+            setTimeout(() => {
+                const response = generateAIResponse(message);
+                addMessage(response, 'ai');
+                conversationHistory.push({role: 'ai', content: response});
+            }, 800);
+        }
+
+        function addMessage(text, sender) {
+            const container = document.getElementById('chatContainer');
+            const messageGroup = document.createElement('div');
+            messageGroup.className = `message-group ${sender}`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = `avatar ${sender}`;
+            avatar.textContent = sender === 'ai' ? '✈' : 'U';
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            
+            const messageText = document.createElement('div');
+            messageText.className = 'message-text';
+            messageText.innerHTML = text.replace(/\n/g, '<br>');
+            
+            messageContent.appendChild(messageText);
+            messageGroup.appendChild(avatar);
+            messageGroup.appendChild(messageContent);
+            
+            container.appendChild(messageGroup);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function generateAIResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            if (!formSubmitted && !userData.name) {
+                return "I'd be happy to help! Please fill out your information in the form above so I can provide personalized recommendations for your private jet needs.";
+            }
+            
+            if (lowerMessage.includes('nyc') && lowerMessage.includes('miami')) {
+                return "NYC to Miami is a popular route, about 3 hours flight time. For this route, I recommend:\n\n• Light Jets (Citation CJ3, Phenom 300): $12,000-15,000 total\n• Midsize Jets (Hawker 900XP, Citation XLS): $18,000-24,000 total\n• Heavy Jets (Gulfstream G450): $35,000-45,000 total\n\nOnce you submit your details, I'll connect you with verified operators who have availability.";
+            } else if (lowerMessage.includes('cost') || lowerMessage.includes('price') || lowerMessage.includes('transcontinental')) {
+                return "Coast-to-coast flights (e.g., NYC to LA) typically run:\n\n• Midsize Jets: $35,000-45,000 (6-8 passengers)\n• Super-Midsize: $45,000-55,000 (8-10 passengers)\n• Heavy Jets: $55,000-75,000 (10-16 passengers)\n\nThese include fuel, crew, and standard catering. I'll find you the best rates once I have your details.";
+            } else if (lowerMessage.includes('amenities')) {
+                return "Private jets offer various amenities based on size:\n\n• Wi-Fi and entertainment systems\n• Full galley with catering\n• Private lavatory\n• Sleeping configurations on longer flights\n• Conference capabilities for business travel\n• Temperature-controlled cabins\n\nWhat specific amenities are most important for your trip?";
+            } else if (lowerMessage.includes('ground') || lowerMessage.includes('transport')) {
+                return "Absolutely! We coordinate complete door-to-door service:\n\n• Luxury car service to/from airports\n• Helicopter transfers in major cities\n• Yacht connections for island destinations\n• Security teams when needed\n\nGround transport typically adds $500-2,000 depending on distance and vehicle type.";
+            } else if (lowerMessage.includes('tomorrow') || lowerMessage.includes('available')) {
+                return "I can check real-time availability across our network of operators. For immediate departures (within 24-48 hours), we typically have:\n\n• 15-20 light jets available\n• 10-15 midsize options\n• 5-8 heavy jets ready\n\nProvide your route and I'll check specific availability and pricing immediately.";
+            } else {
+                return "I'll help you find the perfect jet for your needs. Based on your requirements, I'll match you with verified operators and secure the best rates. You'll earn rewards through Fly Swift Tail on every booking. What specific aspect would you like to explore?";
+            }
+        }
+
+        function submitUserInfo() {
+            const name = document.getElementById('userName').value;
+            const location = document.getElementById('userLocation').value;
+            const phone = document.getElementById('userPhone').value;
+            
+            if (!name || !location || !phone) {
+                addMessage("Please fill in all fields so I can provide personalized recommendations.", 'ai');
+                return;
+            }
+            
+            userData = {
+                ...userData,
+                name: name,
+                location: location,
+                phone: phone
+            };
+            
+            formSubmitted = true;
+            
+            // Hide form after submission
+            document.getElementById('quickForm').style.display = 'none';
+            
+            // Add confirmation message
+            const confirmMessage = `Perfect, ${userData.name}! I've received your information.\n\nBased on your ${userData.purpose} travel needs from ${userData.location}, I'm preparing personalized recommendations. Our verified partners will contact you at ${userData.phone} within 2 hours with:\n\n• Available aircraft matching your requirements\n• Competitive quotes from multiple operators\n• Exclusive empty leg opportunities\n• Your Fly Swift Tail rewards enrollment\n\nMeanwhile, feel free to ask me any questions about routes, aircraft, or pricing!`;
+            
+            addMessage(confirmMessage, 'ai');
+            
+            // Log data for backend integration
+            console.log('User Data:', userData);
+            console.log('Conversation:', conversationHistory);
+            
+            // In production: send to your API
+            // fetch('/api/leads', {
+            //     method: 'POST',
+            //     headers: {'Content-Type': 'application/json'},
+            //     body: JSON.stringify({userData, conversationHistory})
+            // });
+        }
+
+        function getPremiumPlan() {
+            if (!userData.name) {
+                addMessage("Please fill in your details first so I can create your personalized premium plan.", 'ai');
+                document.getElementById('userName').focus();
+                return;
+            }
+            
+            addMessage(`${userData.name}, I'm preparing your Premium AI Flight Plan!\n\nYour personalized plan will include:\n• Optimal aircraft analysis for your routes\n• Cost comparison across 50+ operators\n• Empty leg matching algorithm\n• VIP ground service coordination\n• 24/7 concierge support\n\nProcessing payment and generating your plan...`, 'ai');
+            
+            // In production: trigger payment flow
+            console.log('Premium Plan Request:', userData);
+        }
+    </script>
+</body>
+</html>
