@@ -5,11 +5,13 @@
   <title>NYC ⇄ Hamptons Helicopter & Short Hops | FST × HeliNY</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Direct helicopter routes from NYC to the Hamptons, Montauk, White Plains, Cape & Islands & more. Request to book—FST confirms with HeliNY." />
-  <link rel="canonical" href="https://flyswifttail.com/nyc-helicopter-routes" />
+  <!-- Demo SEO -->
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="canonical" href="https://adamqureshi.github.io/fly-swift-tail/nyc-helicopter-routes.html" />
   <meta property="og:title" content="NYC ⇄ Hamptons Helicopter & Short Hops | FST × HeliNY" />
   <meta property="og:description" content="Direct helicopter routes from NYC to the Hamptons, Montauk, White Plains, Cape & Islands & more. Request to book—FST confirms with HeliNY." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://flyswifttail.com/nyc-helicopter-routes" />
+  <meta property="og:url" content="https://adamqureshi.github.io/fly-swift-tail/nyc-helicopter-routes.html" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     /* Optional: smooth modal fade-in */
@@ -109,7 +111,7 @@
   </section>
 
   <!-- Partner & notes -->
-  <section class="mx-auto max-w-7xl px-6 pb-16 lg:px-8">
+  <section class="mx-auto max-w-7xl px-6 pb-8 lg:px-8">
     <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
       <h3 class="text-base font-semibold">About this service</h3>
       <p class="mt-2 text-sm text-slate-600">
@@ -117,6 +119,27 @@
         Times shown are typical one-way flight durations from Manhattan heliports and may vary with routing, ATC, and weather.
         Final pricing, baggage limits, and availability are provided at confirmation.
       </p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="mx-auto max-w-7xl px-6 pb-16 lg:px-8">
+    <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+      <h2 class="text-lg font-semibold">FAQ</h2>
+      <div class="mt-4 space-y-3">
+        <details class="group rounded-xl border border-slate-200 p-4">
+          <summary class="cursor-pointer font-medium">Which NYC heliports can I depart from?</summary>
+          <p class="mt-2 text-sm text-slate-600">Downtown Manhattan (JRB), East 34th Street (TSS), or West 30th Street (JRA). We’ll confirm based on availability and routing.</p>
+        </details>
+        <details class="group rounded-xl border border-slate-200 p-4">
+          <summary class="cursor-pointer font-medium">How much luggage can I bring?</summary>
+          <p class="mt-2 text-sm text-slate-600">Soft-sided bags are best. Exact limits depend on aircraft and pax count—FST confirms with the operator at booking.</p>
+        </details>
+        <details class="group rounded-xl border border-slate-200 p-4">
+          <summary class="cursor-pointer font-medium">How are flight times calculated?</summary>
+          <p class="mt-2 text-sm text-slate-600">Times shown are typical one-way durations from Manhattan; actual times vary with ATC, weather, and routing.</p>
+        </details>
+      </div>
     </div>
   </section>
 
@@ -212,6 +235,36 @@
   <footer class="border-t border-slate-200 bg-white py-8 text-center text-xs text-slate-500">
     © <span id="year"></span> FST. Routes and schedules subject to change.
   </footer>
+
+  <!-- FAQ JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [{
+      "@type": "Question",
+      "name": "Which NYC heliports can I depart from?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Downtown Manhattan (JRB), East 34th Street (TSS), or West 30th Street (JRA). Availability confirmed at booking."
+      }
+    },{
+      "@type": "Question",
+      "name": "How much luggage can I bring?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Soft-sided bags recommended. Limits depend on aircraft and passenger count and are confirmed at booking."
+      }
+    },{
+      "@type": "Question",
+      "name": "How are flight times calculated?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Times are typical one-way estimates from NYC heliports; actual times vary with ATC, weather, and routing."
+      }
+    }]
+  }
+  </script>
 
   <script>
     // ——— Data ———
@@ -391,7 +444,11 @@
       if (e.target === modalBackdrop) closeModal();
     });
 
-    // Booking form submit (demo: console.log; plug your endpoint below)
+    // ——— Form submission ———
+    // Put your Formspree endpoint here when ready (looks like: https://formspree.io/f/abcd1234).
+    // Safe fallback: if empty, we just console.log and show success (keeps demo working).
+    const FORMSPREE = ""; // <-- add your Formspree URL to send real emails
+
     bookingForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
@@ -407,17 +464,31 @@
         email: formEmail.value,
         phone: formPhone.value,
         notes: formNotes.value,
+        _subject: "FST × HeliNY booking request",
+        _origin: location.href,
+        _utm: location.search
       };
 
-      // TODO: replace with your integration (HeliNY/API/email/zap)
-      // Example:
-      // await fetch("https://your-endpoint.example/heliny-bookings", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify(payload)
-      // });
+      let sent = false;
+      if (FORMSPREE) {
+        try {
+          const res = await fetch(FORMSPREE, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Accept": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          if (!res.ok) throw new Error("Formspree error");
+          sent = true;
+        } catch (err) {
+          console.error("Formspree failed:", err);
+          alert("Couldn’t send your request. Please try again or email bookings@flyswifttail.com.");
+          return;
+        }
+      }
 
-      console.log("FST × HeliNY booking request", payload);
+      if (!sent) {
+        console.log("FST × HeliNY booking request (demo)", payload);
+      }
 
       bookingForm.classList.add("hidden");
       bookingSuccess.classList.remove("hidden");
@@ -425,3 +496,4 @@
   </script>
 </body>
 </html>
+
