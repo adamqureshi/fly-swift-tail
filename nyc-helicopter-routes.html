@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>NYC ⇄ Hamptons Helicopter & Short Hops | FST × HeliNY</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Direct helicopter routes from NYC to the Hamptons, Montauk, White Plains, Cape & Islands & more. Request to book—FST confirms with HeliNY." />
+  <link rel="canonical" href="https://flyswifttail.com/nyc-helicopter-routes" />
+  <meta property="og:title" content="NYC ⇄ Hamptons Helicopter & Short Hops | FST × HeliNY" />
+  <meta property="og:description" content="Direct helicopter routes from NYC to the Hamptons, Montauk, White Plains, Cape & Islands & more. Request to book—FST confirms with HeliNY." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://flyswifttail.com/nyc-helicopter-routes" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Optional: smooth modal fade-in */
+    .fade-enter { opacity: 0; transform: translateY(4px); }
+    .fade-enter-active { opacity: 1; transform: translateY(0); transition: opacity .15s ease, transform .15s ease; }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  <!-- Header / Hero -->
+  <header class="relative isolate overflow-hidden bg-white">
+    <div class="mx-auto max-w-7xl px-6 pt-16 pb-12 sm:pb-16 lg:px-8">
+      <div class="mx-auto max-w-3xl text-center">
+        <h1 class="text-3xl sm:text-5xl font-semibold tracking-tight text-slate-900">
+          NYC ⇄ Hamptons & Short Hops by Helicopter
+        </h1>
+        <p class="mt-4 text-lg text-slate-600">
+          FST partners with <span class="font-medium">HeliNY Charters</span> for fast, direct helicopter routes across the Northeast.
+          Request to book below and our team will coordinate the details and operator confirmation.
+        </p>
+        <div class="mt-6 flex items-center justify-center gap-3">
+          <button id="open-booking" class="rounded-2xl bg-slate-900 px-5 py-3 text-white text-sm font-medium shadow hover:bg-slate-800">
+            Request to Book
+          </button>
+          <a href="#routes" class="rounded-2xl border border-slate-300 px-5 py-3 text-sm font-medium hover:bg-slate-100">
+            See Routes & Times
+          </a>
+        </div>
+        <p class="mt-4 text-xs text-slate-500">All times are one-way estimates from Manhattan heliports; subject to ATC, weather, and daylight/curfew restrictions.</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- How it works -->
+  <section class="mx-auto max-w-7xl px-6 py-10 lg:px-8">
+    <div class="grid gap-4 sm:grid-cols-3">
+      <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+        <div class="flex items-center gap-3">
+          <div class="flex h-8 w-8 items-center justify-center rounded-full bg-slate-900 text-white text-sm font-semibold">1</div>
+          <h3 class="text-base font-semibold">Pick a route</h3>
+        </div>
+        <p class="mt-3 text-sm text-slate-600">Choose a popular hop or request a custom routing.</p>
+      </div>
+      <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+        <div class="flex items-center gap-3">
+          <div class="flex h-8 w-8 items-center justify-center rounded-full bg-slate-900 text-white text-sm font-semibold">2</div>
+          <h3 class="text-base font-semibold">Send request</h3>
+        </div>
+        <p class="mt-3 text-sm text-slate-600">Share date, time, passengers, and luggage details.</p>
+      </div>
+      <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+        <div class="flex items-center gap-3">
+          <div class="flex h-8 w-8 items-center justify-center rounded-full bg-slate-900 text-white text-sm font-semibold">3</div>
+          <h3 class="text-base font-semibold">Confirm & fly</h3>
+        </div>
+        <p class="mt-3 text-sm text-slate-600">We confirm availability & pricing with HeliNY and finalize your itinerary.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Routes -->
+  <section id="routes" class="mx-auto max-w-7xl px-6 pb-20 lg:px-8">
+    <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex gap-2 rounded-xl bg-white p-1 ring-1 ring-slate-200 shadow-sm">
+        <button id="tab-popular" class="rounded-lg px-4 py-2 text-sm font-medium bg-slate-900 text-white">Popular</button>
+        <button id="tab-all" class="rounded-lg px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100">All routes</button>
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        <div class="relative">
+          <input id="search" placeholder="Search destination, airport, region…" class="w-72 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-900/10" />
+        </div>
+        <select id="region" class="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm"></select>
+        <select id="sort" class="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm">
+          <option value="time">Sort by time</option>
+          <option value="alpha">Sort A–Z</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="overflow-hidden rounded-2xl bg-white ring-1 ring-slate-200 shadow-sm">
+      <table class="min-w-full divide-y divide-slate-200">
+        <thead class="bg-slate-50">
+          <tr>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">Destination</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-600 hidden sm:table-cell">Region</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">Est. Time</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-600 hidden md:table-cell">Destination Airport</th>
+            <th class="px-4 py-3"></th>
+          </tr>
+        </thead>
+        <tbody id="routes-body" class="divide-y divide-slate-100"></tbody>
+      </table>
+    </div>
+
+    <p class="mt-4 text-xs text-slate-500">
+      Don’t see your destination? <button id="open-custom" class="underline underline-offset-4">Request a custom routing</button>.
+    </p>
+  </section>
+
+  <!-- Partner & notes -->
+  <section class="mx-auto max-w-7xl px-6 pb-16 lg:px-8">
+    <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+      <h3 class="text-base font-semibold">About this service</h3>
+      <p class="mt-2 text-sm text-slate-600">
+        Flights are coordinated by <span class="font-medium">FST</span> and operated by our partner <span class="font-medium">HeliNY Charters</span>.
+        Times shown are typical one-way flight durations from Manhattan heliports and may vary with routing, ATC, and weather.
+        Final pricing, baggage limits, and availability are provided at confirmation.
+      </p>
+    </div>
+  </section>
+
+  <!-- Booking Modal -->
+  <div id="modal-backdrop" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-slate-900/50"></div>
+    <div id="modal-card" class="fade-enter fixed inset-x-4 top-10 mx-auto max-w-2xl rounded-2xl bg-white shadow-xl ring-1 ring-slate-200">
+      <div class="flex items-start justify-between gap-4 border-b border-slate-200 p-5">
+        <div>
+          <h2 class="text-lg font-semibold">Request to Book</h2>
+          <p class="mt-1 text-xs text-slate-500">We’ll coordinate with HeliNY Charters and reply with availability & pricing.</p>
+        </div>
+        <button id="modal-close" aria-label="Close" class="rounded-lg p-2 text-slate-500 hover:bg-slate-100">✕</button>
+      </div>
+
+      <form id="booking-form" class="grid gap-4 p-5 sm:grid-cols-2">
+        <div class="sm:col-span-2 grid gap-2 sm:grid-cols-3">
+          <div>
+            <label class="mb-1 block text-xs font-medium text-slate-600">Route</label>
+            <select id="form-route" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm">
+              <option value="">NYC ⇄ (custom)</option>
+            </select>
+          </div>
+          <div>
+            <label class="mb-1 block text-xs font-medium text-slate-600">Direction</label>
+            <select id="form-direction" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm">
+              <option>One-way</option>
+              <option>Round-trip</option>
+            </select>
+          </div>
+          <div>
+            <label class="mb-1 block text-xs font-medium text-slate-600">Preferred heliport (NYC)</label>
+            <select id="form-heliport" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm">
+              <option>Downtown Manhattan Heliport</option>
+              <option>East 34th Street Heliport</option>
+              <option>West 30th Street Heliport</option>
+              <option>Other / TBD</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="mb-1 block text-xs font-medium text-slate-600">Date</label>
+          <input id="form-date" type="date" required class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm" />
+        </div>
+        <div>
+          <label class="mb-1 block text-xs font-medium text-slate-600">Time</label>
+          <input id="form-time" type="time" required class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm" />
+        </div>
+        <div>
+          <label class="mb-1 block text-xs font-medium text-slate-600">Passengers</label>
+          <input id="form-pax" type="number" min="1" max="6" value="3" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm" />
+        </div>
+        <div>
+          <label class="mb-1 block text-xs font-medium text-slate-600">Luggage (approx)</label>
+          <input id="form-luggage" type="text" placeholder="e.g., 3 carry-ons + 2 soft duffels" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm" />
+        </div>
+
+        <div class="sm:col-span-2 grid gap-4 sm:grid-cols-3">
+          <div class="sm:col-span-3">
+            <label class="mb-1 block text-xs font-medium text-slate-600">Contact name</label>
+            <input id="form-name" type="text" required class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm" />
+          </div>
+          <div>
+            <label class="mb-1 block text-xs font-medium text-slate-600">Email</label>
+            <input id="form-email" type="email" required class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm" />
+          </div>
+          <div>
+            <label class="mb-1 block text-xs font-medium text-slate-600">Phone</label>
+            <input id="form-phone" type="tel" required class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm" />
+          </div>
+          <div class="sm:col-span-3">
+            <label class="mb-1 block text-xs font-medium text-slate-600">Notes</label>
+            <textarea id="form-notes" rows="3" placeholder="Timing flexibility, child seats, pets, special handling, etc." class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm"></textarea>
+          </div>
+        </div>
+
+        <div class="sm:col-span-2 flex items-center justify-between pt-2">
+          <p class="text-xs text-slate-500">Submitting doesn’t charge your card. We’ll confirm availability & pricing first.</p>
+          <button type="submit" class="rounded-2xl bg-slate-900 px-5 py-2.5 text-sm font-medium text-white shadow hover:bg-slate-800">Submit request</button>
+        </div>
+      </form>
+
+      <div id="booking-success" class="hidden p-8 text-center">
+        <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">✓</div>
+        <h3 class="text-lg font-semibold">Request received</h3>
+        <p class="mt-2 text-sm text-slate-600">Our team will reach out shortly to finalize details and route your trip to HeliNY Charters.</p>
+        <button id="success-close" class="mt-6 rounded-2xl border border-slate-300 px-5 py-2.5 text-sm font-medium hover:bg-slate-100">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="border-t border-slate-200 bg-white py-8 text-center text-xs text-slate-500">
+    © <span id="year"></span> FST. Routes and schedules subject to change.
+  </footer>
+
+  <script>
+    // ——— Data ———
+    const ALL_ROUTES = [
+      // Popular
+      { id: "whampt", popular: true, region: "Hamptons", destination: "West Hampton", timeMin: 30, airport: "Francis S. Gabreski Airport" },
+      { id: "ehampt", popular: true, region: "Hamptons", destination: "East Hampton", timeMin: 45, airport: "East Hampton Airport" },
+      { id: "montauk", popular: true, region: "Hamptons", destination: "Montauk", timeMin: 55, airport: "Montauk Airport" },
+      { id: "whiteplains", popular: true, region: "Tri-State", destination: "White Plains", timeMin: 15, airport: "Westchester County Airport" },
+      { id: "vineyard", popular: true, region: "Cape & Islands", destination: "Vineyard Haven", timeMin: 90, airport: "Martha's Vineyard Airport" },
+      { id: "nantucket", popular: true, region: "Cape & Islands", destination: "Nantucket", timeMin: 90, airport: "Nantucket Memorial Airport" },
+      { id: "boston", popular: true, region: "New England", destination: "Boston", timeMin: 90, airport: "Logan International Airport" },
+      { id: "acnj", popular: true, region: "Tri-State", destination: "Atlantic City", timeMin: 45, airport: "Atlantic City International Airport" },
+      { id: "newhaven", popular: true, region: "New England", destination: "New Haven", timeMin: 30, airport: "Tweed New Haven Airport" },
+      { id: "phl", popular: true, region: "Mid-Atlantic", destination: "Philadelphia", timeMin: 40, airport: "Philadelphia International Airport" },
+      // Other short hops
+      { id: "saratoga", popular: false, region: "Upstate NY", destination: "Saratoga Springs", timeMin: 90, airport: "Saratoga County Airport" },
+      { id: "albany", popular: false, region: "Upstate NY", destination: "Albany", timeMin: 80, airport: "Albany International Airport" },
+      { id: "rochester", popular: false, region: "Upstate NY", destination: "Rochester", timeMin: 120, airport: "Frederick Douglass Greater Rochester Int'l" },
+      { id: "buffalo", popular: false, region: "Upstate NY", destination: "Buffalo", timeMin: 140, airport: "Buffalo Niagara International" },
+      { id: "morristown", popular: false, region: "Tri-State", destination: "Morristown", timeMin: 15, airport: "Morristown Municipal" },
+      { id: "capecod", popular: false, region: "Cape & Islands", destination: "Cape Cod", timeMin: 100, airport: "Provincetown Municipal" },
+      { id: "bridgeport", popular: false, region: "New England", destination: "Bridgeport", timeMin: 25, airport: "Bridgeport / Sikorsky Airport" },
+      { id: "killington", popular: false, region: "New England", destination: "Killington", timeMin: 120, airport: "Rutland Regional Airport" },
+      { id: "stowe", popular: false, region: "New England", destination: "Stowe", timeMin: 150, airport: "Morrisville-Stowe State Airport" },
+      { id: "bwi", popular: false, region: "Mid-Atlantic", destination: "Baltimore", timeMin: 90, airport: "Baltimore/Washington International" },
+    ];
+
+    const REGIONS = ["All regions","Hamptons","Tri-State","Cape & Islands","New England","Upstate NY","Mid-Atlantic"];
+
+    // ——— State ———
+    let currentTab = "popular"; // "popular" | "all"
+    let currentRegion = "All regions";
+    let currentSort = "time";   // "time" | "alpha"
+    let searchQuery = "";
+
+    // ——— Elements ———
+    const routesBody = document.getElementById("routes-body");
+    const tabPopular = document.getElementById("tab-popular");
+    const tabAll = document.getElementById("tab-all");
+    const searchEl = document.getElementById("search");
+    const regionEl = document.getElementById("region");
+    const sortEl = document.getElementById("sort");
+    const openBookingBtn = document.getElementById("open-booking");
+    const openCustomBtn = document.getElementById("open-custom");
+
+    const modalBackdrop = document.getElementById("modal-backdrop");
+    const modalCard = document.getElementById("modal-card");
+    const modalClose = document.getElementById("modal-close");
+    const bookingForm = document.getElementById("booking-form");
+    const bookingSuccess = document.getElementById("booking-success");
+    const successClose = document.getElementById("success-close");
+
+    const formRoute = document.getElementById("form-route");
+    const formDirection = document.getElementById("form-direction");
+    const formHeliport = document.getElementById("form-heliport");
+    const formDate = document.getElementById("form-date");
+    const formTime = document.getElementById("form-time");
+    const formPax = document.getElementById("form-pax");
+    const formLuggage = document.getElementById("form-luggage");
+    const formName = document.getElementById("form-name");
+    const formEmail = document.getElementById("form-email");
+    const formPhone = document.getElementById("form-phone");
+    const formNotes = document.getElementById("form-notes");
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Populate region filter
+    REGIONS.forEach(r => {
+      const opt = document.createElement("option");
+      opt.value = r;
+      opt.textContent = r;
+      regionEl.appendChild(opt);
+    });
+
+    // Populate route select in modal
+    function refreshFormRouteOptions() {
+      // clear except first
+      [...formRoute.querySelectorAll("option")].forEach((opt, i) => { if (i>0) opt.remove(); });
+      ALL_ROUTES.forEach(r => {
+        const opt = document.createElement("option");
+        opt.value = r.id;
+        opt.textContent = `NYC ⇄ ${r.destination} (${r.timeMin} min)`;
+        formRoute.appendChild(opt);
+      });
+    }
+    refreshFormRouteOptions();
+
+    // Tab handlers
+    tabPopular.addEventListener("click", () => {
+      currentTab = "popular";
+      tabPopular.className = "rounded-lg px-4 py-2 text-sm font-medium bg-slate-900 text-white";
+      tabAll.className = "rounded-lg px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100";
+      render();
+    });
+    tabAll.addEventListener("click", () => {
+      currentTab = "all";
+      tabAll.className = "rounded-lg px-4 py-2 text-sm font-medium bg-slate-900 text-white";
+      tabPopular.className = "rounded-lg px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100";
+      render();
+    });
+
+    // Filters
+    searchEl.addEventListener("input", e => { searchQuery = e.target.value.toLowerCase().trim(); render(); });
+    regionEl.addEventListener("change", e => { currentRegion = e.target.value; render(); });
+    sortEl.addEventListener("change", e => { currentSort = e.target.value; render(); });
+
+    // Render table rows
+    function render() {
+      let rows = ALL_ROUTES.filter(r => currentTab === "popular" ? r.popular : true);
+      if (currentRegion !== "All regions") rows = rows.filter(r => r.region === currentRegion);
+      if (searchQuery) {
+        rows = rows.filter(r =>
+          r.destination.toLowerCase().includes(searchQuery) ||
+          r.airport.toLowerCase().includes(searchQuery) ||
+          r.region.toLowerCase().includes(searchQuery)
+        );
+      }
+      if (currentSort === "time") rows.sort((a,b) => a.timeMin - b.timeMin);
+      if (currentSort === "alpha") rows.sort((a,b) => a.destination.localeCompare(b.destination));
+
+      routesBody.innerHTML = "";
+      rows.forEach(r => {
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-slate-50/60";
+
+        tr.innerHTML = `
+          <td class="px-4 py-3 align-middle text-sm text-slate-700">
+            <div class="flex items-center gap-2">
+              ${r.popular ? '<span class="inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold text-amber-800 ring-1 ring-amber-200">Popular</span>' : ''}
+              <span class="font-medium">NYC ⇄ ${r.destination}</span>
+            </div>
+            <div class="mt-1 text-xs text-slate-500 sm:hidden">${r.region} • ${r.airport}</div>
+          </td>
+          <td class="px-4 py-3 align-middle text-sm text-slate-700 hidden sm:table-cell">${r.region}</td>
+          <td class="px-4 py-3 align-middle text-sm text-slate-700">
+            <span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-700 ring-1 ring-slate-200">${r.timeMin} min</span>
+          </td>
+          <td class="px-4 py-3 align-middle text-sm text-slate-700 hidden md:table-cell">${r.airport}</td>
+          <td class="px-4 py-3 align-middle text-sm text-slate-700">
+            <button class="rounded-xl bg-slate-900 px-3 py-1.5 text-xs font-medium text-white shadow hover:bg-slate-800" data-book="${r.id}">Request to Book</button>
+          </td>
+        `;
+        routesBody.appendChild(tr);
+      });
+
+      // wire up per-row booking buttons
+      document.querySelectorAll("[data-book]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          openModal(btn.getAttribute("data-book"));
+        });
+      });
+    }
+    render();
+
+    // Modal controls
+    function openModal(routeId) {
+      formRoute.value = routeId || "";
+      bookingSuccess.classList.add("hidden");
+      bookingForm.classList.remove("hidden");
+      modalBackdrop.classList.remove("hidden");
+      // small entrance animation
+      modalCard.classList.remove("fade-enter");
+      void modalCard.offsetWidth; // reflow
+      modalCard.classList.add("fade-enter-active");
+    }
+    function closeModal() {
+      modalBackdrop.classList.add("hidden");
+      modalCard.classList.remove("fade-enter-active");
+      modalCard.classList.add("fade-enter");
+    }
+    document.getElementById("open-booking").addEventListener("click", () => openModal());
+    document.getElementById("open-custom").addEventListener("click", () => openModal());
+    modalClose.addEventListener("click", closeModal);
+    successClose.addEventListener("click", closeModal);
+    modalBackdrop.addEventListener("click", (e) => {
+      if (e.target === modalBackdrop) closeModal();
+    });
+
+    // Booking form submit (demo: console.log; plug your endpoint below)
+    bookingForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const payload = {
+        routeId: formRoute.value,
+        direction: formDirection.value,
+        date: formDate.value,
+        time: formTime.value,
+        pax: Number(formPax.value || 0),
+        luggage: formLuggage.value,
+        heliport: formHeliport.value,
+        name: formName.value,
+        email: formEmail.value,
+        phone: formPhone.value,
+        notes: formNotes.value,
+      };
+
+      // TODO: replace with your integration (HeliNY/API/email/zap)
+      // Example:
+      // await fetch("https://your-endpoint.example/heliny-bookings", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(payload)
+      // });
+
+      console.log("FST × HeliNY booking request", payload);
+
+      bookingForm.classList.add("hidden");
+      bookingSuccess.classList.remove("hidden");
+    });
+  </script>
+</body>
+</html>
